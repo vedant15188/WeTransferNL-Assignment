@@ -27,3 +27,9 @@ Run the Program
 ```bash
   python CircuitBreaker.py
 ```
+
+## Acknowledgements
+
+ - [Awesome README.md Editor](https://readme.so/editor)
+ - [Python Requests Library Docs](https://requests.readthedocs.io/en/latest/)
+ - [Understanding Circuit Breaker Design Pattern](https://medium.com/geekculture/design-patterns-for-microservices-circuit-breaker-pattern-276249ffab33)
