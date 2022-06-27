@@ -22,9 +22,10 @@ Install dependencies
   pip install requests
 ```
 
-Run the Program
+Run the Program (Run in 2 separate terminals)
 
 ```bash
+  python Server.py
   python CircuitBreaker.py
 ```
 
@@ -33,3 +34,5 @@ Run the Program
  - [Awesome README.md Editor](https://readme.so/editor)
  - [Python Requests Library Docs](https://requests.readthedocs.io/en/latest/)
  - [Understanding Circuit Breaker Design Pattern](https://medium.com/geekculture/design-patterns-for-microservices-circuit-breaker-pattern-276249ffab33)
+ - [HTTP Server Library Docs](https://docs.python.org/3/library/http.server.html)
+ - [HTTP Server Example](https://pythonbasics.org/webserver/)
