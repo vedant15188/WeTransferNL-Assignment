@@ -1,9 +1,9 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
-            # Error response if URL path contains the word 
+            # Error response if URL path contains the word error
             if("error" in self.path):
                 self.send_response(500)
                 self.send_header("Content-type", "text/html")

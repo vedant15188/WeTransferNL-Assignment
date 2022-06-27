@@ -1,5 +1,15 @@
 import requests
 from time import sleep
+import threading
+from http.server import HTTPServer
+
+import Server
+
+def startServer(webServer):
+    try:
+        webServer.serve_forever()
+    except KeyboardInterrupt:
+        pass
 
 class CircuitBreaker:
     def __init__(self, http_client, error_threshold, time_window):
@@ -31,20 +41,35 @@ class CircuitBreaker:
 if __name__ == "__main__":
     print("Hello WeTransfer!!\n-------------------------------\n")
 
-    timeOut = int(input("Input the timeout threshold (in seconds): "))
-    errThreshold = int(input("Input the error threshold: "))
+    try:
+        webServer = HTTPServer(("localhost", 8000), Server.MyServer)
+        print("Starting simple python HTTP server...")
 
-    N = int(input("Enter the total number of requests you want to send: "))
+        # Starting the HTTP Server on a new thread to keep the main prog. running
+        serverThread = threading.Thread(target=startServer, args=(webServer,))
+        serverThread.daemon = True
+        serverThread.start()
 
-    breaker = CircuitBreaker(requests, errThreshold, timeOut)
+        print("Server started http://%s:%s" % ("localhost", 8000))
 
-    for i in range(N):
-        print("Request no. ", i+1)
-        # Condition to simulate OPEN condition for CircuitBreaker
-        if((i % (errThreshold*2)) < errThreshold):
-            print("Simulating error")
-            breaker.do_request("http://localhost:8000/error")
-        else:
-            print("Simulating normal request")
-            breaker.do_request("http://localhost:8000/")
-        sleep(1)
+        timeOut = int(input("Input the timeout threshold (in seconds): "))
+        errThreshold = int(input("Input the error threshold: "))
+
+        N = int(input("Enter the total number of requests you want to send: "))
+
+        breaker = CircuitBreaker(requests, errThreshold, timeOut)
+
+        for i in range(N):
+            print("Request no. ", i+1)
+            # Condition to simulate OPEN condition for CircuitBreaker
+            if((i % (errThreshold*2)) < errThreshold):
+                print("Simulating error")
+                breaker.do_request("http://localhost:8000/error")
+            else:
+                print("Simulating normal request")
+                breaker.do_request("http://localhost:8000/")
+            sleep(1)
+    except Exception as e:
+        print(e)
+        print("Failed to start the server")
+        quit()

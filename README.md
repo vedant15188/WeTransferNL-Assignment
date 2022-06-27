@@ -22,10 +22,9 @@ Install dependencies
   pip install requests
 ```
 
-Run the Program (Run in 2 separate terminals)
+Run the Program
 
 ```bash
-  python Server.py
   python CircuitBreaker.py
 ```
 
@@ -36,3 +35,5 @@ Run the Program (Run in 2 separate terminals)
  - [Understanding Circuit Breaker Design Pattern](https://medium.com/geekculture/design-patterns-for-microservices-circuit-breaker-pattern-276249ffab33)
  - [HTTP Server Library Docs](https://docs.python.org/3/library/http.server.html)
  - [HTTP Server Example](https://pythonbasics.org/webserver/)
+ - [Threading Library Docs](https://docs.python.org/3/library/threading.html)
+ - [How to kill a thread, an article from GeeksForGeeks.org](https://www.geeksforgeeks.org/python-different-ways-to-kill-a-thread/)
