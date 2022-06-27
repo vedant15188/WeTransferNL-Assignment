@@ -40,5 +40,11 @@ if __name__ == "__main__":
 
     for i in range(N):
         print("Request no. ", i+1)
-        # Add condition to simulate OPEN condition for CircuitBreaker
-        breaker.do_request("http://localhost:8000/")
+        # Condition to simulate OPEN condition for CircuitBreaker
+        if((i % (errThreshold*2)) < errThreshold):
+            print("Simulating error")
+            breaker.do_request("http://localhost:8000/error")
+        else:
+            print("Simulating normal request")
+            breaker.do_request("http://localhost:8000/")
+        sleep(1)
