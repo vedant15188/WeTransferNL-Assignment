@@ -1,7 +1,10 @@
+import imp
+import queue
 import requests
 from time import sleep
 import threading
 from http.server import HTTPServer
+from queue import Queue
 
 import Server
 
@@ -16,7 +19,7 @@ class CircuitBreaker:
         self.http_client = http_client
         self.error_threshold = error_threshold
         self.time_window = time_window
-        self.errorCount = 0
+        self.errorQueue = Queue(maxsize=error_threshold)
 
     def do_request(self, url):
         try:
@@ -24,19 +27,19 @@ class CircuitBreaker:
             print(response)
             if(response.status_code == 200):
                 print("Successful response!")
-                self.errorCount = 0
+                self.errorQueue = Queue(maxsize=self.error_threshold)
             else:
                 print("Not a successful request!")
                 raise Exception()
         except:
-            self.errorCount += 1
-            print("error count: ", self.errorCount)
-            if(self.errorCount >= self.error_threshold):
+            self.errorQueue.put(1)
+            print("error count: ", self.errorQueue.qsize())
+            if(self.errorQueue.full()):
                 print("Circuit Open!")
                 print("Circuit is currenty in open state so no new requests to the service will be entertained!")
                 print("sleeping for ", self.time_window, " secs")
                 sleep(self.time_window)
-                self.errorCount = 0
+                self.errorQueue = Queue(maxsize=self.error_threshold)
 
 if __name__ == "__main__":
     print("Hello WeTransfer!!\n-------------------------------\n")
