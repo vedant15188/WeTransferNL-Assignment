@@ -37,3 +37,5 @@ Run the Program
  - [HTTP Server Example](https://pythonbasics.org/webserver/)
  - [Threading Library Docs](https://docs.python.org/3/library/threading.html)
  - [How to kill a thread, an article from GeeksForGeeks.org](https://www.geeksforgeeks.org/python-different-ways-to-kill-a-thread/)
+ - [datetime Library Docs](https://docs.python.org/3/library/datetime.html)
+ - [Python Queue Library Docs](https://docs.python.org/3/library/queue.html)

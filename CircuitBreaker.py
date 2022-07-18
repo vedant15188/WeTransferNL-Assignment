@@ -20,17 +20,18 @@ class CircuitBreaker:
         self.error_threshold = error_threshold
         self.time_window = time_window
         self.errorQueue = Queue(maxsize=error_threshold)
-        # Circuite state, 0 for closed, 1 for open
+        # Circuit state, 0 for closed, 1 for open
         self.state = 0
 
     def do_request(self, url):
         try:
             response = self.http_client.get(url)
             print(response)
+
             if(self.errorQueue.full()):
                 self.state = 1
                 print("Circuit Open!!")
-                print("Circuit is currenty in open state so no new requests to the service will be entertained!")
+                print("Circuit is currenty in open state so no new requests to the service will be entertained!\n\n")
                 raise Exception()
             elif(response.status_code == 200):
                 print("Successful response!")
@@ -39,7 +40,6 @@ class CircuitBreaker:
                 print("Not a successful request!")
                 raise Exception()
         except:
-            print("Exception raised!")
             errorEvent = {
                 "errorCode": response.status_code,
                 "timeStamp": datetime.now()
@@ -47,15 +47,12 @@ class CircuitBreaker:
 
             # Insert the error event if the queue is empty
             if(self.errorQueue.empty()):
-                # print("Empty queue Case")
                 self.errorQueue.put(errorEvent)
             # Exit the function if the circuit is open!
             elif(self.state == 1):
-                # print("Circuit Open Case")
                 self.errorQueue = Queue(maxsize=self.error_threshold)
                 return
             else:
-                # print("Appending error event to queue case")
                 queueCondition = True
 
                 # Keep dequeuing the error events till we're within the confines of the time window and then insert the event.
@@ -90,15 +87,16 @@ if __name__ == "__main__":
 
         breaker = CircuitBreaker(requests, errThreshold, timeWindow)
 
+        # Sending N requests at every second
         for i in range(N):         
             print("Request no. ", i+1)
             
             # Condition to simulate OPEN condition for CircuitBreaker
             if((i % (errThreshold*2)) < errThreshold):
-                # print("Simulating error")
+                print("Simulating error")
                 breaker.do_request("http://localhost:8000/error")
             else:
-                # print("Simulating normal request")
+                print("Simulating normal request")
                 breaker.do_request("http://localhost:8000/")
 
             if(breaker.state == 1):
