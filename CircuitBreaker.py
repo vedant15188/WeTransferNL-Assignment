@@ -26,7 +26,7 @@ class CircuitBreaker:
     def do_request(self, url):
         try:
             response = self.http_client.get(url)
-            print(response)
+            # print(response)
 
             if(self.errorQueue.full()):
                 self.state = 1
@@ -94,10 +94,10 @@ if __name__ == "__main__":
             # Condition to simulate OPEN condition for CircuitBreaker
             if((i % (errThreshold*2)) < errThreshold):
                 print("Simulating error")
-                breaker.do_request("http://localhost:8000/error")
+                breaker.do_request("http://localhost:8000/error")   # Server returns a 500 HTTP response
             else:
                 print("Simulating normal request")
-                breaker.do_request("http://localhost:8000/")
+                breaker.do_request("http://localhost:8000/")        # Server returns a 200 HTTP response
 
             if(breaker.state == 1):
                 print("sleeping for ", timeWindow, " secs")
